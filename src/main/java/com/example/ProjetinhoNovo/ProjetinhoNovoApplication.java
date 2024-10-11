@@ -1,0 +1,14 @@
+package com.example.ProjetinhoNovo;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ProjetinhoNovoApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ProjetinhoNovoApplication.class, args);
+
+	}
+
+}
