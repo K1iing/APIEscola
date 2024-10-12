@@ -1,7 +1,5 @@
 package com.example.ProjetinhoNovo.Alunos;
 
-import com.example.ProjetinhoNovo.Controllers.AtualizarAlunos;
-
 public record PessoaDetalhamento(
         Long id,
         String nome,

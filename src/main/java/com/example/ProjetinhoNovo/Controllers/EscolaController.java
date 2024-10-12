@@ -52,7 +52,7 @@ public class EscolaController {
 
     @DeleteMapping("/deletar/{id}")
     @Transactional
-    public ResponseEntity<Void> excluir (@PathVariable Long id) {
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
         repository.deleteById(id);
 
         return ResponseEntity.noContent().build();
@@ -77,7 +77,7 @@ public class EscolaController {
     }
 
     @GetMapping("/detalhar/{id}")
-    public ResponseEntity<PessoaDetalhamento> detalhar(@PathVariable Long id){
+    public ResponseEntity<PessoaDetalhamento> detalhar(@PathVariable Long id) {
         var alunos = repository.getReferenceById(id);
 
 

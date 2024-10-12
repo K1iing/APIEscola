@@ -1,6 +1,5 @@
 package com.example.ProjetinhoNovo.Alunos;
 
-import com.example.ProjetinhoNovo.Controllers.AtualizarAlunos;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
 import lombok.*;
