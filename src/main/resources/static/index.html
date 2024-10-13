@@ -1,204 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerenciamento de Pessoas</title>
+    <title>Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
-        input, button {
-            margin: 5px 0;
-            padding: 5px;
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
         }
-        .user {
-            margin-bottom: 15px;
+        h2 {
+            text-align: center;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-<h1>Gerenciamento de Pessoas</h1>
-
-<!-- Cadastrar Pessoa -->
-<h2>Cadastrar Pessoa</h2>
-<form id="formCadastro">
-    <input type="text" id="nome" placeholder="Nome" required>
-    <input type="number" id="idade" placeholder="Idade" required>
-    <input type="text" id="escola" placeholder="Escola" required>
-    <input type="text" id="classe" placeholder="Classe" required>
-    <button type="submit">Cadastrar</button>
-</form>
-
-<hr>
-
-<!-- Listar Pessoas Ativas -->
-<h2>Pessoas Ativas</h2>
-<button onclick="listarPessoas()">Listar Pessoas</button>
-<div id="listaPessoas"></div>
-
-<hr>
-
-<!-- Atualizar Pessoa -->
-<h2>Atualizar Pessoa</h2>
-<form id="formAtualizar">
-    <input type="number" id="updateId" placeholder="ID" required>
-    <input type="text" id="updateNome" placeholder="Nome">
-    <input type="number" id="updateIdade" placeholder="Idade">
-    <input type="text" id="updateEscola" placeholder="Escola">
-    <input type="text" id="updateClasse" placeholder="Classe">
-    <button type="submit">Atualizar</button>
-</form>
-
-<hr>
-
-<!-- Deletar Pessoa -->
-<h2>Deletar Pessoa</h2>
-<form id="formDeletar">
-    <input type="number" id="deleteId" placeholder="ID da Pessoa" required>
-    <button type="submit">Deletar</button>
-</form>
-
-<hr>
-
-<!-- Inativar Pessoa -->
-<h2>Inativar Pessoa</h2>
-<form id="formInativar">
-    <input type="number" id="inativarId" placeholder="ID da Pessoa" required>
-    <button type="submit">Inativar</button>
-</form>
-
-<hr>
-
-<!-- Ativar Pessoa -->
-<h2>Ativar Pessoa</h2>
-<form id="formAtivar">
-    <input type="number" id="ativarId" placeholder="ID da Pessoa" required>
-    <button type="submit">Ativar</button>
-</form>
+<div class="container">
+    <h2>Login</h2>
+    <form id="loginForm">
+        <input type="text" id="login" name="login" placeholder="Login" required>
+        <input type="password" id="senha" name="senha" placeholder="Senha" required>
+        <button type="submit">Entrar</button>
+    </form>
+    <div id="mensagem" style="color: red; margin-top: 10px;"></div>
+</div>
 
 <script>
-    const baseUrl = 'http://localhost:8080'; // Altere para o URL correto da sua API
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault(); // Impede o envio padrão do formulário
 
-    // Cadastrar Pessoa
-    document.getElementById('formCadastro').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const nome = document.getElementById('nome').value;
-        const idade = document.getElementById('idade').value;
-        const escola = document.getElementById('escola').value;
-        const classe = document.getElementById('classe').value;
+        const login = document.getElementById('login').value;
+        const senha = document.getElementById('senha').value;
 
-        const response = await fetch(`${baseUrl}/cadastrar`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                nome: nome,
-                idade: idade,
-                escola: escola,
-                classe: classe
-            })
-        });
+        try {
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ login, senha }),
+            });
 
-        if (response.status === 201) {
-            alert('Pessoa cadastrada com sucesso!');
-        } else {
-            alert('Erro ao cadastrar pessoa.');
-        }
-    });
-
-    // Listar Pessoas Ativas
-    async function listarPessoas() {
-        const response = await fetch(`${baseUrl}/listar`);
-        const pessoas = await response.json();
-        const listaDiv = document.getElementById('listaPessoas');
-        listaDiv.innerHTML = '';
-
-        pessoas.forEach(pessoa => {
-            const pessoaDiv = document.createElement('div');
-            pessoaDiv.classList.add('user');
-            pessoaDiv.innerHTML = `ID: ${pessoa.id}, Nome: ${pessoa.nome}, Idade: ${pessoa.idade}, Escola: ${pessoa.escola}, Classe: ${pessoa.classe}`;
-            listaDiv.appendChild(pessoaDiv);
-        });
-    }
-
-    // Atualizar Pessoa
-    document.getElementById('formAtualizar').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const id = document.getElementById('updateId').value;
-        const nome = document.getElementById('updateNome').value;
-        const idade = document.getElementById('updateIdade').value;
-        const escola = document.getElementById('updateEscola').value;
-        const classe = document.getElementById('updateClasse').value;
-
-        const response = await fetch(`${baseUrl}/atualizar`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                id: id,
-                nome: nome,
-                idade: idade,
-                escola: escola,
-                classe: classe
-            })
-        });
-
-        if (response.ok) {
-            alert('Pessoa atualizada com sucesso!');
-        } else {
-            alert('Erro ao atualizar pessoa.');
-        }
-    });
-
-    // Deletar Pessoa
-    document.getElementById('formDeletar').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const id = document.getElementById('deleteId').value;
-
-        const response = await fetch(`${baseUrl}/deletar/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            alert('Pessoa deletada com sucesso!');
-        } else {
-            alert('Erro ao deletar pessoa.');
-        }
-    });
-
-    // Inativar Pessoa
-    document.getElementById('formInativar').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const id = document.getElementById('inativarId').value;
-
-        const response = await fetch(`${baseUrl}/inativar/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok) {
-            alert('Pessoa inativada com sucesso!');
-        } else {
-            alert('Erro ao inativar pessoa.');
-        }
-    });
-
-    // Ativar Pessoa
-    document.getElementById('formAtivar').addEventListener('submit', async function(event) {
-        event.preventDefault();
-        const id = document.getElementById('ativarId').value;
-
-        const response = await fetch(`${baseUrl}/ativar/${id}`, {
-            method: 'PUT'
-        });
-
-        if (response.ok) {
-            alert('Pessoa ativada com sucesso!');
-        } else {
-            alert('Erro ao ativar pessoa.');
+            if (response.ok) {
+                // Se a autenticação for bem-sucedida, redireciona para a página principal
+                window.location.href = '/home'; // Altere para a URL desejada após o login
+            } else {
+                const data = await response.json();
+                document.getElementById('mensagem').innerText = data.message || 'Erro ao fazer login';
+            }
+        } catch (error) {
+            document.getElementById('mensagem').innerText = 'Erro ao conectar ao servidor';
         }
     });
 </script>
